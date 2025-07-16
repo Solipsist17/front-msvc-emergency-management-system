@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "Comisaria-La-Palma",
+    "slug": "Comisaria-La-Palma",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "sentric",
+    "icon": "./assets/images/escudo.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/escudo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/escudo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.solipsist17.ComisariaLaPalma"
+    },
+    "web": {
+      "favicon": "./assets/images/escudo.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "c4a206cd-e9e3-4298-845a-7b44ba8625f8"
+      }
+    },
+    "owner": "solipsist17"
+  }
+}
