@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 const clientApiGateway = axios.create({
-  baseURL: "http://192.168.10.5:8080",
+  baseURL: "http://192.168.0.15:8080",
   timeout: 10000, // 10 seconds timeout
   headers: {
     "Content-Type": "application/json",

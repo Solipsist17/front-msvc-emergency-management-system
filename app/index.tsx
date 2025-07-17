@@ -11,6 +11,7 @@ import { Shield } from "../components/Shield";
 // import de notificaciones push
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
+import clientApiGateway from "../services/clientApiGateway";
 
 const LoginScreen = ({ navigation }) => {
   // código de notificaciones push
@@ -21,7 +22,11 @@ const LoginScreen = ({ navigation }) => {
   useEffect(() => {
     // función que solicita permisos, obtiene el token y lo envía al backend
     const registerForPushNotifications = async () => {
+      console.log("Entrando a registerForPushNotifications"); /////
+      console.log("Device.isDevice:", Device.isDevice); //////
+
       if (Device.isDevice) {
+        console.log("verificamos si tenemos permisos de notificaciones"); /////
         // verificamos si ya tenemos permisos de notificaciones
         const { status: existingStatus } =
           await Notifications.getPermissionsAsync();
@@ -33,17 +38,33 @@ const LoginScreen = ({ navigation }) => {
           finalStatus = status;
         }
 
+        console.log("si el usuario no concede permisos, mostramos un mensaje"); /////
         // si el usuario no concede permisos, mostramos un mensaje
         if (finalStatus !== "granted") {
           Alert.alert("Permisos denegados para notificaciones");
           return;
         }
 
+        console.log("si todo esá bien, obtenemos el token de notificaciones"); /////
         // si todo está bien, obtenemos el token de notificaciones del dispositivo
-        const token = (await Notifications.getExpoPushTokenAsync()).data;
-        console.log("Expo Push Token:", token);
+        try {
+          const token = (await Notifications.getExpoPushTokenAsync()).data;
+          console.log("Expo Push Token:", token);
+        } catch (err) {
+          console.error("Error al obtener el token de notificaciones:", err);
+          return;
+        }
 
-        // Enviamos el token al backend Spring Boot
+        // Enviamos el token al backend Spring Boot (msvc-notifications)
+        try {
+          await clientApiGateway.post("/api/notifications/devices", {
+            expoPushToken: token,
+          });
+          console.log("Token enviado correctamente al backend");
+        } catch (error) {
+          console.error("Error al enviar el token al backend:", error);
+        }
+
         /*
         await fetch("https://tu-backend.com/api/notificaciones/token", {
           method: "POST",
@@ -62,6 +83,7 @@ const LoginScreen = ({ navigation }) => {
     };
 
     // ejecutamos la función al cargar el componente
+    console.log("Registrando para notificaciones push...");
     registerForPushNotifications();
 
     // Listener cuando la app está en foreground (primer plano)
