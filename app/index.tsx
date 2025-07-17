@@ -47,6 +47,7 @@ const LoginScreen = ({ navigation }) => {
 
         console.log("si todo esá bien, obtenemos el token de notificaciones"); /////
         // si todo está bien, obtenemos el token de notificaciones del dispositivo
+        let token;
         try {
           const token = (await Notifications.getExpoPushTokenAsync()).data;
           console.log("Expo Push Token:", token);
