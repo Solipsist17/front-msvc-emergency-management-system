@@ -14,6 +14,7 @@ import * as Device from "expo-device";
 import clientApiGateway from "../services/clientApiGateway";
 
 const LoginScreen = ({ navigation }) => {
+  /*
   // código de notificaciones push
   const notificationListener = useRef(null);
   const responseListener = useRef(null);
@@ -49,7 +50,7 @@ const LoginScreen = ({ navigation }) => {
         // si todo está bien, obtenemos el token de notificaciones del dispositivo
         let token;
         try {
-          const token = (await Notifications.getExpoPushTokenAsync()).data;
+          token = (await Notifications.getExpoPushTokenAsync()).data;
           console.log("Expo Push Token:", token);
         } catch (err) {
           console.error("Error al obtener el token de notificaciones:", err);
@@ -65,17 +66,7 @@ const LoginScreen = ({ navigation }) => {
         } catch (error) {
           console.error("Error al enviar el token al backend:", error);
         }
-
-        /*
-        await fetch("https://tu-backend.com/api/notificaciones/token", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: "123", // reemplazar por el ID del usuario real 
-            token: token,
-          }),
-        });
-        */
+        
       } else {
         Alert.alert(
           "Debes usar un dispositivo físico para recibir notificaciones"
@@ -106,7 +97,7 @@ const LoginScreen = ({ navigation }) => {
       responseListener.current?.remove();
     };
   }, []);
-
+  */
   // Fin del código de notificaciones push
 
   // interfaz visual del login

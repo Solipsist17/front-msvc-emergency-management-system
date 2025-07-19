@@ -24,7 +24,12 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.solipsist17.ComisariaLaPalma",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAwY5-Lz0QLuCjktDhClmwyxEKHfy92fTo"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/images/escudo.png"
