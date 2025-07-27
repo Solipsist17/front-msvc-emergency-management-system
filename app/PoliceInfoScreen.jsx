@@ -1,29 +1,29 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   Image,
-  Pressable
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Picker } from '@react-native-picker/picker';
-import { PoliceFooter } from '../components/PoliceFooter';
-import { useNavigation } from '@react-navigation/native';
-import { Link } from 'expo-router';
+  Pressable,
+} from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import { Picker } from "@react-native-picker/picker";
+import { PoliceFooter } from "../components/PoliceFooter";
+import { useNavigation } from "@react-navigation/native";
+import { Link } from "expo-router";
+import { logout } from "../utils/logout";
 
 const PoliceInfoScreen = () => {
-      const [patrulla, setPatrulla] = useState('');
-      const navigation = useNavigation();
-      
+  const [patrulla, setPatrulla] = useState("");
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
-
       <View style={styles.profileContainer}>
         <View style={styles.imageWrapper}>
           <Image
-            source={ require('../assets/images/original.jpg') } // Reemplazar con URI real o ruta local
+            source={require("../assets/images/original.jpg")} // Reemplazar con URI real o ruta local
             style={styles.profileImage}
           />
           <TouchableOpacity style={styles.cameraIcon}>
@@ -47,18 +47,18 @@ const PoliceInfoScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <Link href="/" asChild>
-            <Pressable style={styles.passwordButton}>
-                  <Text style={styles.passwordButtonText}>Cerrar Sesion</Text>
-            </Pressable>
-        </Link>
+        {/* <Link href="/" asChild> */}
+        <Pressable style={styles.passwordButton} onPress={logout}>
+          <Text style={styles.passwordButtonText}>Cerrar Sesion</Text>
+        </Pressable>
+        {/* </Link> */}
 
         <Link href="/UpdatePassPoliceScreen" asChild>
-            <Pressable style={styles.passwordButton} >
-                  <Text style={styles.passwordButtonText}>Actualizar contraseña</Text>
-            </Pressable>
+          <Pressable style={styles.passwordButton}>
+            <Text style={styles.passwordButtonText}>Actualizar contraseña</Text>
+          </Pressable>
         </Link>
-        
+
         <View style={styles.dropdown}>
           <Text style={styles.dropdownLabel}>Seleccionar patrulla</Text>
           <Picker
@@ -76,27 +76,25 @@ const PoliceInfoScreen = () => {
   );
 };
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0fff0',
+    backgroundColor: "#f0fff0",
     paddingTop: 40,
   },
   backButton: {
-    backgroundColor: '#1d4d4f',
+    backgroundColor: "#1d4d4f",
     padding: 10,
     borderRadius: 20,
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginLeft: 15,
   },
   profileContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingHorizontal: 20,
   },
   imageWrapper: {
-    position: 'relative',
+    position: "relative",
   },
   profileImage: {
     width: 120,
@@ -104,30 +102,30 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
   cameraIcon: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
     right: 0,
-    backgroundColor: '#ccc',
+    backgroundColor: "#ccc",
     borderRadius: 15,
     padding: 5,
   },
   name: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 10,
   },
   contactCard: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 15,
     borderRadius: 10,
     marginTop: 15,
-    width: '100%',
+    width: "100%",
     elevation: 3,
-    position: 'relative',
+    position: "relative",
   },
   contactRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 5,
   },
   contactText: {
@@ -135,30 +133,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   editIcon: {
-    position: 'absolute',
+    position: "absolute",
     top: 10,
     right: 10,
   },
   passwordButton: {
     marginTop: 20,
-    backgroundColor: '#147e6d',
+    backgroundColor: "#147e6d",
     padding: 12,
     borderRadius: 8,
   },
   passwordButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   dropdown: {
     marginTop: 30,
-    width: '100%',
+    width: "100%",
   },
   dropdownLabel: {
     fontSize: 16,
     marginBottom: 8,
   },
   picker: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
   },
 });

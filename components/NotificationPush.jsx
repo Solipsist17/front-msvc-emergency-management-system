@@ -9,37 +9,46 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import clientApiGateway from "../services/clientApiGateway";
-import {
-  connectWebSocket,
-  disconnectWebSocket,
-} from "../services/clientWebSocket";
 import { router } from "expo-router";
+import * as Notifications from "expo-notifications";
 
 export default function NotificationPush() {
   const [incidents, setIncidents] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const fetchIncidents = async () => {
-    try {
-      const response = await clientApiGateway.get("/api/incidents");
-      setIncidents(response.data.content);
-    } catch (error) {
-      console.error("Error al obtener incidentes:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [latestNotification, setLatestNotification] = useState(null);
+  // lista de notificaciones recibidas por push
+  // variable notifications inicializada [], función setNotifications que actualiza el valor de notifications
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    fetchIncidents(); // primera carga
+    // se suscribe al evento de notificaciones
+    const subscription = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("🔔 Notificación recibida:", notification);
 
-    // Conectar WebSocket y recibir nuevos incidentes
-    connectWebSocket((newIncident) => {
-      console.log("📡 Incidente en tiempo real:", newIncident);
-      setIncidents((prev) => [newIncident, ...prev]);
-    });
+        // extrae los datos de la notificación
+        const data = notification.request.content.data;
 
-    return () => disconnectWebSocket();
+        // actualiza el estado de "notifications" añadiendo una nueva notificación al principio de la lista
+        setNotifications((prev) => [
+          // objeto de la lista "notifications"
+          {
+            id: 14, // harcodeado para pruebas, debería usar un ID único real
+            title: notification.request.content.title,
+            body: notification.request.content.body,
+            type: data.type,
+            description: data.description,
+            latitude: data.latitude,
+            longitude: data.longitude,
+            status: data.status,
+            createdAt: new Date(),
+          },
+          ...prev,
+        ]);
+      }
+    );
+
+    return () => subscription.remove();
   }, []);
 
   const statusColors = {
@@ -56,25 +65,30 @@ export default function NotificationPush() {
   };
 
   return (
+    // permite desplazar el contenido verticalmente si se desborda la pantalla
     <ScrollView contentContainerStyle={styles.scrollContent}>
-      <Text style={styles.sectionTitle}>Incidentes de hoy</Text>
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : incidents.length === 0 ? (
+      <Text style={styles.sectionTitle}>Incidentes recientes</Text>
+
+      {/* Si no hay notificaciones aún, mostramos un mensaje */}
+      {notifications.length === 0 ? (
         <Text style={{ textAlign: "center", marginTop: 20, fontSize: 16 }}>
-          No hay incidentes registrados.
+          No hay notificaciones recibidas aún.
         </Text>
       ) : (
-        incidents.map((incident) => (
+        // Si hay notificaciones, las recorremos con .map() para renderizarlas una por una
+        notifications.map((incident) => (
+          // Pressable es como un botón: se puede presionar
           <Pressable
-            key={incident.id}
+            key={incident.id} // clave única para cada notificación
             style={styles.incidentCard}
-            onPress={() => handleIncidentInfo(incident)}
+            onPress={() => handleIncidentInfo(incident)} // función que se ejecuta al presionar la notificación
           >
+            {/* Encabezado de la notificación */}
             <View style={styles.cardHeader}>
               <Text style={styles.incidentType}>
-                {incident.type ? `🚨 ${incident.type}` : "🚨 INCIDENTE"}
+                {incident.title ? `🚨 ${incident.title}` : "🚨 INCIDENTE"}
               </Text>
+              {/* Punto de color para indicar el estado del incidente (pendiente, resuelto, etc.) */}
               <View
                 style={[
                   styles.statusDot,
@@ -86,9 +100,10 @@ export default function NotificationPush() {
               />
             </View>
 
-            {incident.description && (
+            {/* Descripción de la notificación */}
+            {incident.body && (
               <Text style={styles.incidentDesc}>
-                Descripción: {incident.description}
+                Descripción: {incident.body}
               </Text>
             )}
 
@@ -192,5 +207,19 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     marginTop: 4,
     marginRight: 6,
+  },
+  notificationCard: {
+    backgroundColor: "#d1f5d3",
+    borderLeftWidth: 5,
+    borderLeftColor: "#2ecc71",
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  notificationTitle: {
+    fontWeight: "bold",
+    fontSize: 15,
+    marginBottom: 4,
+    color: "#2c3e50",
   },
 });
